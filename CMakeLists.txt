@@ -2,18 +2,15 @@ cmake_minimum_required(VERSION 3.25)
 
 project(ch8emu)
 
-# 1. Define core logic as a library
-add_library(ch8_core STATIC 
-    src/cpu.cxx 
-    src/utils.cxx
-)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
-# 2. Define the main executable
-add_executable(ch8emu src/main.cxx)
-target_link_libraries(ch8emu PRIVATE ch8_core)
+################################################################################
+#                           Fetch GoogleTest and SDL3                          #
+################################################################################
 
-# 3. Setup GoogleTest
 include(FetchContent)
+
+# Google test
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -21,7 +18,36 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-# 4. Setup Testing
+# SDL3
+FetchContent_Declare(
+  SDL3
+  GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+  GIT_TAG        release-3.4.2
+)
+FetchContent_MakeAvailable(SDL3)
+
+################################################################################
+#                                  Build rules                                 #
+################################################################################
+
+# Define core logic as a library
+add_library(ch8_core STATIC 
+    src/cpu.cxx 
+    src/utils.cxx
+    src/renderer.cxx
+)
+
+target_link_libraries(ch8_core PUBLIC SDL3::SDL3)
+
+# Define the main executable
+add_executable(ch8emu src/main.cxx)
+target_link_libraries(ch8emu PRIVATE ch8_core)
+
+################################################################################
+#                                    Testing                                   #
+################################################################################
+
+# Setup Testing
 enable_testing() # Call this before discovering tests
 include(GoogleTest)
 
