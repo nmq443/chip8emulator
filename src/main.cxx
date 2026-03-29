@@ -5,11 +5,12 @@
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
   CPU cpu{};
+  if (!cpu.loadROM("rom/IBM Logo.ch8")) {
+    return 1;
+  }
   Renderer renderer{};
 
   bool running{true};
-
-  auto testBuffer{getTestBuffer()};
 
   SDL_Event event;
   auto handleEvent = [&running](const SDL_Event &event) {
@@ -25,8 +26,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     while (SDL_PollEvent(&event)) {
       handleEvent(event);
     }
-
-    renderer.Render(testBuffer);
+    cpu.cycle();
+    renderer.Render(cpu.getDisplay());
     SDL_Delay(static_cast<Uint32>(1000.0 / FREQUENCY));
   }
 
