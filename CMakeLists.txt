@@ -60,6 +60,14 @@ endif()
 # Define the assets folder
 set(ROM_FILES 
     "rom/IBM Logo.ch8"
+    "rom/1-chip8-logo.ch8"
+    "rom/2-ibm-logo.ch8"
+    "rom/3-corax+.ch8"
+    "rom/4-flags.ch8"
+    "rom/5-quirks.ch8"
+    "rom/6-keypad.ch8"
+    "rom/7-beep.ch8"
+    "rom/8-scrolling.ch8"
 )
 
 # Copy assets to the output directory where the .exe lives
